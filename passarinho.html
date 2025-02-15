@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Emanuelly exercicio do passaro</title>
+    <style>
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        </style>
+        </head>
+        <body>
+                <script>  // Vamos escrever JS+ Phaser, aqui dentro.
+
+
+                // CONFIGURAÇÕES DO JOGO, TAM TELA E RENDERIZAÇÃO.
+                var config= {
+                  type:  Phaser.AUTO,
+                  width: 800,
+                  height: 600,
+
+                  scene: {
+                  preload: preload, //FUNÇÃO CARREGA RECURSOS
+                  create: create, //FUNÇÃO PARA INICIALIZAR OBJETOS E ANIMAÇÕES
+                  update: update, //FUNÇÃO PARA ATUALIZAR A TELA DE CADA FRAME
+               }
+            };
+                
+                var game = new Phaser.Game(config); //CRIA JOGO CONFIG
+
+                var passarinho; //ARMAZENA OBJETO PASSARINHO;
+                
+                function preload(){
+                    this.load.image('bg','assets/fundo.passaro.jpg'); //CARREGA IMAGEM DE FUNDO
+                    this.load.spritesheet('bird', 'assets/bird-purple.png', {frameWidth:75, frameHeight: 75}); //CARREGA SPRITESHEET DO PASSARINHO
+                }
+
+                function create (){
+                    this.add.image(400, 300, 'bg').setScale(1.2); //ADD IMAGEM DO FUNDO
+                    passarinho= this.add.sprite(100,300, 'bird').setScale(1.3); //CRIA SPRITE DO PASSARINHO E DEFINE ESCALA
+
+                   //CRIA ANIMAÇÃO DO PASSARINHO, SEU MOVIMENTO DE VOO. 
+                    this.anims.create({ 
+                        key:'fly',
+                        frames: this.anims.generateFrameNumbers('bird', {start: 0, end: 7}), //FRAMES DE 0 A 7.
+                        frameRates: 10, //DEFINE A FAIXA DE FRAMES POR SEGUNDO
+                        repeat: -1 //FAZ A ANIMAÇÃO REPETIR INFINITAMENTE
+                    })
+
+                //INICIA ANIMAÇÃO 
+                passarinho.anims.play('fly', true);
+                }
+                    
+
+                function update(){
+
+            //QUANDO ELE ESTÁ NA POSIÇÃO 100, ELE É PREPARADO PARA VOAR PARA DIREITA
+            if (passarinho.x === 100) { 
+                // setFlip, INDICA QUE A IMAGEM DEVE SER ESPELHADA HORIZONTAL E VERTICALMENTE
+                passarinho.setFlip(false, false);
+                passarinho.ida = true;
+            }
+           
+            
+            //O PASSARINHO É LIMITADO ATE A POSIÇÃO 700, SOMANDO DE 5 EM 5
+            if (passarinho.x < 700 && passarinho.ida === true){
+                console.log("O passarinho avança ate a posição 700, realizando a soma de 5 em 5");
+
+                 // USANDO O LAÇO FOR PARA AVANÇAR O PASSARINHO HORIZONTALMENTE DE 5 EM 5 
+                for (let i = passarinho.x; i < 700; i += 5) {
+                    passarinho.x += 5;
+
+            //O PASSARINHO AVANÇA VERTICALMENTE ATÉ ALCANÇAR A POSIÇÃO 500, SOMANDO DE 5 EM 5
+                    if (passarinho.y < 500 && passarinho.ida == true) {
+                    passarinho.y += 5;
+            
+                    }
+                }       
+            }
+            //QUANDO O PASSARINHO ATINGE A POSIÇÃO 700 ELE INVERTE A POSIÇÃO
+            if (passarinho.x === 700){
+                passarinho.setFlip(true, false);
+                passarinho.ida = false;
+            }
+            //QUANDO O PASSARINHO ATINGE A POSIÇÃO 700 ATE 100, SUBITRAINDO DE 5 EM 5
+            if (passarinho.x > 100 && passarinho.ida === false) {
+                console.log("O passarinho retorna de forma espelhada, indo de 700 ate a posição 100, realizando a subtração de 5 em 5");
+                
+                 //USANDO O LAÇO FOR PARA RETORNAR O PASSARINHO HORIZONTALMENTE DE 5 EM 5 
+                 for (let i = passarinho.x; i > 100; i -= 5) {
+                    passarinho.x -= 5;    
+                
+                    // O PASSARINHO RETORNA VERTICALMENTE ATÉ ALCANÇAR A POSIÇÃO 100, SOMANDO DE 5 EM 5 
+                    if (passarinho.y > 100 && passarinho.ida === false) {
+                        passarinho.y -= 5;
+                     }
+                 }
+            }
+    
+    }
+    
+
+
+                
+</script>
+<body>
+</html>
